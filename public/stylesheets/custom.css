@@ -69,7 +69,6 @@ nav ul li a {
 }
 
 nav ul li a:visited {
-  color: #09c;
 }
 
 nav ul li a:hover {
@@ -81,7 +80,7 @@ a.signup_button {
   margin-right: auto;
   display: block;
   text-align: center;
-  width: 190px;
+  width: 100px;
   color: #fff;
   background: #006400;
   font-size: 150%;
