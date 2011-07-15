@@ -24,5 +24,39 @@ class User < ActiveRecord::Base
                     :format => {:with => email_regex})
   validates(:password, :presence => true,
                        :confirmation => true,
-                       :lenght => {:within => 6..50})
+                       :length => {:within => 6..50})
+
+  before_save :encrypt_password
+
+  def correct_password?(submitted_password)
+    encrypted_password == encrypt(submitted_password)
+  end
+
+  def self.authenticate(email, password)
+    @user = User.find_by_email(email)
+    if !@user.nil? && @user.correct_password?(password)
+      @user
+    else
+      nil
+    end
+  end
+
+  private 
+    def encrypt_password
+      self.salt = make_salt if new_record?
+      self.encrypted_password = encrypt(password)
+    end
+
+    def encrypt(string)
+      secure_hash("#{salt}--#{string}")
+    end
+
+    def make_salt
+      secure_hash("#{Time.now.utc}--#{password}")
+    end
+
+    def secure_hash(string)
+      Digest::SHA2.hexdigest(string)
+    end
+
 end

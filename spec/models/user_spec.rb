@@ -60,27 +60,43 @@ describe User do
 
     it "should require password and confirm to be equal" do
       user = User.new(@attr.merge(:password => "asdaaaf"))
-      no_password.should_not be_valid
+      user.should_not be_valid
     end
     
     it "should block password that are too short" do
       user = User.new(@attr.merge(:password => "asdf"))
-      no_password.should_not be_valid
+      user.should_not be_valid
     end
     
     it "should block password that are too long" do
       user = User.new(@attr.merge(:password => "a" * 51))
-      no_password.should_not be_valid
+      user.should_not be_valid
     end
   end
 
   describe "encrypted password validation" do
     before(:each) do
-      @user = User.create!(@attr)
+      @user = Factory(:user) 
     end
 
     it "should have an encrypted_password attribute" do
       @user.should respond_to(:encrypted_password)
+    end
+
+    it "should have a valid password" do
+      User.authenticate(@user.email, "wrongpass").should be_nil
+    end
+
+    it "should have a password" do
+      User.authenticate(@user.email, "").should be_nil
+    end
+    
+    it "should return nil for no email" do
+      User.authenticate("", "").should be_nil
+    end
+    
+    it "should return a user for a valid combo" do
+      User.authenticate(@user.email, @user.password).should_not be_nil
     end
   end
 
