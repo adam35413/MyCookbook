@@ -8,6 +8,7 @@ class UsersController < ApplicationController
     # Check if user exists
     @user = User.new(params[:user])
     if @user.save
+      sign_in(@user)
       flash[:success] = "Welcome to Calling This Home Cookbook!"
       redirect_to @user
     else

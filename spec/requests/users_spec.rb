@@ -31,8 +31,27 @@ describe "Users" do
           click_button
           response.should render_template('users/show')
           response.should have_selector("div.flash.success")
+
         end.should change(User, :count).by(1)
       end
+    end
+  end
+
+  describe "sign in" do
+    describe "success" do
+        lambda do
+          visit signin_path
+          fill_in "Email",        :with => "mark@gmail.com"
+          fill_in "Password",     :with => "foobar"
+          click_button
+          response.should render_template('users/show')
+          controller.should be_signed_in
+          click_link "Sign out"
+          controller.should_not be_signed_in
+        end
+    end
+
+    describe "failure" do
     end
   end
 end

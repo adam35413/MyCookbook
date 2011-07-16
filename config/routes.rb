@@ -1,5 +1,7 @@
 MyCookbook::Application.routes.draw do
+
   resources :users
+  resources :sessions, :only => [:new, :destroy, :create]
 
   root :to => 'pages#home'
     
@@ -11,5 +13,8 @@ MyCookbook::Application.routes.draw do
   # Users
   match '/signup', :to => 'users#new'
 
+  # Sessions
+  match '/signin', :to => 'sessions#new'
+  match '/signout', :to => 'sessions#destroy'
 
 end
