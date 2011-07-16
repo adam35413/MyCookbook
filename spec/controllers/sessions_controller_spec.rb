@@ -39,9 +39,9 @@ describe SessionsController do
     describe "failure" do
 
       it "should not create a session with bad credentials" do
-        @attr.merge(:email => "")
+        @attr = @attr.merge(:password => "asdf")
         post :create, :session => @attr
-        controller.should_not be_signed_in
+        flash.now[:error].should =~ /invalid/i
       end
 
     end

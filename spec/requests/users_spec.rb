@@ -39,19 +39,42 @@ describe "Users" do
 
   describe "sign in" do
     describe "success" do
-        lambda do
-          visit signin_path
-          fill_in "Email",        :with => "mark@gmail.com"
-          fill_in "Password",     :with => "foobar"
-          click_button
-          response.should render_template('users/show')
-          controller.should be_signed_in
-          click_link "Sign out"
-          controller.should_not be_signed_in
-        end
+      it "should sign in" do
+        user = Factory(:user)
+        visit signin_path
+        fill_in "Email",        :with => user.email
+        fill_in "Password",     :with => user.password
+        click_button
+        response.should render_template('users/show')
+        controller.should be_signed_in
+        click_link "Sign out"
+        controller.should_not be_signed_in
+      end
+      
+      it "success from home page" do
+        user = Factory(:user)
+        visit root_path
+        click_link "Sign in"
+        fill_in "Email",        :with => user.email
+        fill_in "Password",     :with => user.password
+        click_button
+        response.should render_template('users/show')
+        controller.should be_signed_in
+        click_link "Sign out"
+        controller.should_not be_signed_in
+      end
     end
 
+
     describe "failure" do
+      it "should not sign in" do
+        visit signin_path
+        fill_in "Email",        :with => "mark@gmail.com"
+        fill_in "Password",     :with => "asdfasdf"
+        click_button
+        response.should render_template('sessions/new')
+        controller.should_not be_signed_in
+      end
     end
   end
 end
