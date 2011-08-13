@@ -116,6 +116,7 @@ table.profile {
 td.main {
   width: 70%;
   padding: 1em;
+  margin-bottom: 200px;
 }
 
 td.sidebar {
